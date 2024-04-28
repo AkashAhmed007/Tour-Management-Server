@@ -46,21 +46,48 @@ async function run() {
       const result = await addSpot.insertOne(addspot)
       res.send(result)
     })
+    app.get('/updatespot', async(req,res)=>{
+      const cursor = addSpot.find()
+      const result = await cursor.toArray()
+      res.send(result)
+    })
+    app.get('/updatespot/:id', async(req,res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await addSpot.findOne(query)
+      res.send(result)
+    })
+
+  app.put('/updatespot/:id',async(req,res)=>{
+      const id = req.params.id
+      const places = req.body
+      const filter = {_id: new ObjectId(id)}
+      const options = {upsert: true}
+      const updatedPlace = {
+        $set:{
+          countryName:places.countryName,
+          spotName:places.spotName,
+          location:places.location,
+          cost:places.cost,
+          season:places.season,
+          time:places.time,
+          visitor:places.visitor,
+          email:places.email,
+          image:places.image
+        }
+      }
+
+      const result = await addSpot.updateOne(filter,updatedPlace,options)
+      res.send(result)
+  })
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    app.delete('/addspot/:id', async(req,res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await addSpot.deleteOne(query)
+      res.send(result)
+    })
 
 
     // Send a ping to confirm a successful connection
