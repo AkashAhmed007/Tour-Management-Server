@@ -29,6 +29,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     const addSpot = client.db('addSpotDB').collection('addedSpot')
+    const countries = client.db('countriesDB').collection('country')
 
     app.get('/addspot', async(req,res)=>{
       const cursor = addSpot.find()
@@ -81,14 +82,14 @@ async function run() {
       res.send(result)
   })
 
-
-    app.delete('/addspot/:id', async(req,res) => {
+  app.delete('/addspot/:id', async(req,res) => {
       const id = req.params.id;
       const query = {_id: new ObjectId(id)}
       const result = await addSpot.deleteOne(query)
       res.send(result)
     })
 
+   
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
